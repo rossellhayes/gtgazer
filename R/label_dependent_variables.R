@@ -1,7 +1,7 @@
 label_dependent_variables <- function(models, dependent_variables, call) {
 	label_rename(
 		purrr::map_chr(models, label_dependent_variable),
-		dependent_variables,
+		{{ dependent_variables }},
 		models,
 		arg = "dependent_variables",
 		call = call

@@ -2,14 +2,14 @@ prepare_column_names <- function(
 	columns,
 	models,
 	dependent_variables,
-	model_names,
-	model_types,
-	include_model_types,
-	include_model_numbers
+	model_names = NULL,
+	model_types = NULL,
+	include_model_types = NULL,
+	include_model_numbers = TRUE
 ) {
 	dependent_variables <- label_dependent_variables(
 		models,
-		dependent_variables,
+		{{ dependent_variables }},
 		call = rlang::caller_env()
 	)
 

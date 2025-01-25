@@ -47,7 +47,7 @@ gtgazer <- function(
 	columns <- dplyr::bind_rows(coefficients, summaries) %>%
 		prepare_column_names(
 			models,
-			dependent_variables,
+			{{ dependent_variables }},
 			model_names,
 			model_types,
 			include_model_types,
