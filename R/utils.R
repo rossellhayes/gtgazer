@@ -66,26 +66,19 @@ format_digits <- function(
 	}
 
 	if (any(!is_integer)) {
-		decimals <- formatC(
-			signif(x[!is_integer], decimal_digits_max + (x[!is_integer] >= 1)),
-			digits = decimal_digits_max + 1,
-			width = 1,
-			format = "fg",
-			flag = "#",
-			big.mark = ","
-		)
-		decimals <- substr(
-			decimals,
-			start = 1,
-			stop = decimal_digits_max + 1 + lengths(
-				regmatches(
-					decimals,
-					gregexpr(paste0("[", decimal_mark, "]"), decimals)
-				)
-			)
+		integer_parts <- x[!is_integer] %/% 1
+		decimal_parts <- x[!is_integer] %% 1
+		decimal_parts <- substr(
+			decimal_parts,
+			start = 3,
+			stop = 3 + decimal_digits_max - nchar(integer_parts)
 		)
 
-		out[!is_na][!is_integer] <- decimals
+		out[!is_na][!is_integer] <- paste0(
+			formatC(integer_parts, format = "fg", big.mark = ","),
+			strrep(decimal_mark, nzchar(decimal_parts)),
+			decimal_parts
+		)
 	}
 
 	out[!is_na] <- paste0(strrep("\u2212", negative), out[!is_na])

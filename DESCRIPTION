@@ -14,7 +14,6 @@ Imports:
     magrittr,
     purrr,
     rlang,
-    signs,
     tidyr,
     tidyselect,
     vctrs
