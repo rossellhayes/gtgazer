@@ -13,21 +13,25 @@ construct_coefficients_df <- function(
 			decimal_mark = decimal_mark
 		) %>%
 		dplyr::bind_rows() %>%
-		select_independent_variables(!!!independent_variables) %>%
+		select_independent_variables({{ independent_variables }}) %>%
 		dplyr::mutate(model = dplyr::row_number(), .before = 1) %>%
 		dplyr::mutate(!!!additional_coefficients) %>%
 		transpose(names_from = "model") %>%
 		dplyr::mutate(group = "coefficients", .before = 1)
 }
 
-select_independent_variables <- function(data, ...) {
-	tidyselect_without_name_repair <- tidyselect::eval_select(
-		rlang::expr(c(...)),
-		as.list(data)
-	)
+select_independent_variables <- function(data, independent_variables) {
+	variables_expr <- rlang::quo_get_expr(rlang::enexpr(independent_variables))
 
-	data <- data[tidyselect_without_name_repair]
-	names(data) <- names(tidyselect_without_name_repair)
+	if (isTRUE(try(variables_expr[[1]] == "list", silent = TRUE))) {
+		variables_expr[[1]] <- rlang::expr(c)
+	}
+
+	# tidyselect on as.list(data) because this doesn't enforce unique names
+	tidy_selection <- tidyselect::eval_select(variables_expr, as.list(data))
+
+	data <- data[tidy_selection]
+	names(data) <- names(tidy_selection)
 
 	name_counts <- table(names(data))
 	duplicated_names <- names(name_counts)[name_counts > 1]

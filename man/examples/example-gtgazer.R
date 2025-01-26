@@ -48,3 +48,25 @@ gtgazer(
 		"Survey week fixed effects" = cli::symbol$tick
 	)
 )
+
+dependent_variables <- rlang::expr(
+	c(
+		"MPG" = "mpg",
+		"Straight" = contains("vs")
+	)
+)
+
+indepdendent_variables <- rlang::expr(
+	c(
+		"Power" = any_of(c("hp", "qsec")),
+		"Cylinders" = "cyl",
+		"Size" = any_of(c("wt", "disp")),
+		everything()
+	)
+)
+
+gtgazer(
+	example_lm, example_glm,
+	dependent_variables = {{ dependent_variables }},
+	independent_variables = {{ indepdendent_variables }}
+)

@@ -26,11 +26,9 @@ gtgazer <- function(
 ) {
 	models <- flatten_list(list(...))
 
-	independent_variables <- rlang::enquo(independent_variables)
-
 	coefficients <- construct_coefficients_df(
 		models,
-		independent_variables = independent_variables,
+		independent_variables = {{ independent_variables }},
 		additional_coefficients = additional_coefficients,
 		decimal_digits_max = decimal_digits_max,
 		decimal_mark = decimal_mark
