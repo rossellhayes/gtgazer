@@ -67,9 +67,8 @@ format_digits <- function(
 
 	if (any(!is_integer)) {
 		integer_parts <- x[!is_integer] %/% 1
-		decimal_parts <- x[!is_integer] %% 1
 		decimal_parts <- substr(
-			decimal_parts,
+			formatC(x[!is_integer] %% 1, digits = decimal_digits_max, format = "f"),
 			start = 3,
 			stop = 3 + decimal_digits_max - nchar(integer_parts)
 		)
