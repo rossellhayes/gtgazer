@@ -5,7 +5,13 @@ construct_gtgazer_table <- function(columns) {
 		gt::cols_label("term" ~ "", .fn = gt::md) %>%
 		gt::cols_align(align = "center", columns = -term) %>%
 		gt::cols_align(align = "left", columns = term) %>%
-		gt::tab_source_note(gt::md("*Note:* **p* < 0.05; ***p* < 0.01; ****p* < 0.001")) %>%
+		gt::tab_source_note(
+			gt::md("*Note:* **p* < 0.05; ***p* < 0.01; ****p* < 0.001")
+		) %>%
+		gt::tab_style(
+			gt::cell_text(align = "right"),
+			gt::cells_source_notes()
+		) %>%
 		gt::tab_style(
 			gt::cell_borders(sides = "top", color = "#D3D3D3", weight = gt::px(2)),
 			gt::cells_body(
