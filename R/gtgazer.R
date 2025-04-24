@@ -24,7 +24,7 @@ gtgazer <- function(
 	decimal_mark = ".",
 	keep_models = TRUE
 ) {
-	models <- flatten_list(list(...))
+	models <- flatten_list(rlang::list2(...))
 
 	coefficients <- construct_coefficients_df(
 		models,
