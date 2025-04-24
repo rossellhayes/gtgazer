@@ -65,7 +65,7 @@ construct_coefficients_and_intercepts_df <- function(
 	decimal_digits_max,
 	decimal_mark
 ) {
-	tidy_df <- generics::tidy(model)
+	tidy_df <- broom::tidy(model)
 
 	is_intercept <- if ("coef.type" %in% names(tidy_df)) {
 		tidy_df$coef.type == "intercept"

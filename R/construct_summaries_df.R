@@ -8,7 +8,7 @@ construct_summaries_df <- function(
 	glance_df <- models %>%
 		purrr::map(
 			function(model) {
-				generics::glance(model) %>%
+				broom::glance(model) %>%
 					purrr::map(unclass) %>%
 					dplyr::bind_cols()
 			}
