@@ -96,7 +96,7 @@ construct_coefficients_and_intercepts_df <- function(
 	) %>%
 		dplyr::select(term, value) %>%
 		dplyr::mutate(term = as.character(term)) %>%
-		tidyr::pivot_wider(names_from = .data$term, values_from = .data$value) %>%
+		tidyr::pivot_wider(names_from = "term", values_from = "value") %>%
 		dplyr::mutate(dplyr::across(which(is_intercept), as_intercept_column))
 }
 
