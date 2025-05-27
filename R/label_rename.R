@@ -12,19 +12,30 @@ label_rename <- function(
 		\(i) {
 			this_manual_label <- as.call(c(rlang::expr(c), label_exprs[i]))
 
-			these_manual_labels <- try(
-				tidyselect::eval_rename(
-					this_manual_label,
-					rlang::set_names(automatic_labels)
-				),
-				silent = TRUE
+			these_manual_labels <- purrr::imap(
+				automatic_labels,
+				function(this_automatic_label, index) {
+					result <- try(
+						tidyselect::eval_rename(
+							this_manual_label,
+							rlang::set_names(this_automatic_label)
+						),
+						silent = TRUE
+					)
+
+					result[result == 1] <- index
+
+					result
+				}
 			)
 
-			if (inherits(these_manual_labels, "try-error")) {
+			if (
+				purrr::every(these_manual_labels, function(x) inherits(x, "try-error"))
+			) {
 				return(rlang::eval_bare(this_manual_label))
 			}
 
-			these_manual_labels
+			Filter(function(x) !inherits(x, "try-error"), these_manual_labels)
 		}
 	)
 
