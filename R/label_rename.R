@@ -5,10 +5,17 @@ label_rename <- function(
 	arg,
 	call
 ) {
-	label_exprs <- as.list(rlang::quo_get_expr(rlang::enquo(manual_labels)))
+	label_exprs <- rlang::quo_get_expr(rlang::enquo(manual_labels))
+
+	if (isTRUE(try(is.name(label_exprs), silent = TRUE))) {
+		label_exprs <- get0(label_exprs)
+	}
+
+	label_exprs <- as.list(label_exprs)
+	label_exprs <- label_exprs[!purrr::map_lgl(label_exprs, is.name)]
 
 	manual_labels <- purrr::map(
-		seq_along(label_exprs)[-1],
+		seq_along(label_exprs),
 		\(i) {
 			this_manual_label <- as.call(c(rlang::expr(c), label_exprs[i]))
 
