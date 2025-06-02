@@ -23,6 +23,10 @@ construct_coefficients_df <- function(
 select_independent_variables <- function(data, independent_variables) {
 	variables_expr <- rlang::quo_get_expr(rlang::enexpr(independent_variables))
 
+	if (isTRUE(try(is.name(variables_expr), silent = TRUE))) {
+		variables_expr <- rlang::parse_expr(deparse(get(variables_expr)))
+	}
+
 	if (isTRUE(try(variables_expr[[1]] == "list", silent = TRUE))) {
 		variables_expr[[1]] <- rlang::expr(c)
 	}
